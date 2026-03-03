@@ -70,6 +70,10 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log('MongoDB Connection Failed', err));
 
+  app.get("/", (req, res) => {
+  res.send("Backend is working");
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
