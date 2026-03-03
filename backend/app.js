@@ -34,11 +34,12 @@
 //     console.log(`App is listening on ${port}`)
 // })
 
-
-
+require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 const userrouter = require('./routes/userroutes');
 const adminrouter = require('./routes/adminroutes');
 const templereprouter = require('./routes/templereproutes');
@@ -46,16 +47,13 @@ const servicerouter = require('./routes/serviceroutes');
 const donationrouter = require('./routes/donationroutes');
 const announcementrouter = require('./routes/announcementroutes');
 const contactrouter = require('./routes/contactroutes');
-const cors = require('cors');
 
 const app = express();
-
-// ✅ Use environment PORT
 const PORT = process.env.PORT || 5000;
 
-// ✅ Allow frontend URL in production
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173"
+  origin: process.env.FRONTEND_URL,
+  credentials: true
 }));
 
 app.use(express.json());
@@ -68,15 +66,10 @@ app.use(donationrouter);
 app.use(announcementrouter);
 app.use(contactrouter);
 
-// ✅ Use environment MongoDB URI
 mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-    console.log('MongoDB Connected');
-})
-.catch((err) => {
-    console.log('MongoDB Connection Failed', err);
-});
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.log('MongoDB Connection Failed', err));
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
